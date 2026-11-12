@@ -55,7 +55,7 @@
             display: block;
         }
 
-        /* --- NAVIGASI HEADER (DENGAN MENGGUNAKAN GRID) --- */
+        /* --- NAVIGASI HEADER --- */
         header {
             background: linear-gradient(to right, #1a1a1a 20%, #005f6b 65%, #008080 100%);
             color: #fff;
@@ -110,7 +110,6 @@
             color: var(--accent-color); 
         }
 
-        /* Menerapkan CSS Grid pada menu navigasi */
         nav ul {
             list-style: none;
             padding: 0;
@@ -134,7 +133,7 @@
             text-decoration: none;
             font-size: 18px;
             transition: color 0.3s;
-            white-space: nowrap; /* Menjaga agar tulisan menu tidak patah baris */
+            white-space: nowrap;
         }
 
         nav ul li a:hover, nav ul li a.active {
@@ -271,7 +270,6 @@
             color: #ffffff;
         }
 
-        /* --- WADAH KONTEN UTAMA --- */
         .container {
             width: 100%;
             max-width: 90%; 
@@ -281,7 +279,6 @@
             box-sizing: border-box;
         }
 
-        /* Konfigurasi Halaman SPA */
         .page-content {
             display: none;
             background: #fff;
@@ -318,7 +315,6 @@
             letter-spacing: -1px;
         }
 
-        /* --- SISTEM GRID RESPONSIF --- */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
@@ -327,44 +323,6 @@
             width: 100%;
         }
 
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .card {
-            border: 1px solid #eee;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            background: #fafafa;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-sizing: border-box;
-        }
-
-        .card h3 {
-            font-family: var(--title-font);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            font-size: 1.5em;
-            margin-top: 5px;
-        }
-
-        .card p {
-            font-family: var(--primary-font);
-            font-size: 1.1em;
-            color: #444444;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        /* --- KOTAK FOTO GALLERY MEMBERS --- */
         .member-wrapper {
             background: #fafafa;
             border: 1px solid #eee;
@@ -386,12 +344,6 @@
             object-fit: cover;
             display: block;
             margin-bottom: 15px;
-        }
-
-        @media screen and (max-width: 480px) {
-            .member-img-box {
-                height: 300px;
-            }
         }
 
         .spotify-header {
@@ -428,7 +380,6 @@
             border-radius: 12px;
         }
 
-        /* --- BANNER COOKIES & FOOTER --- */
         .cookie-banner {
             font-family: var(--primary-font);
             position: fixed;
@@ -468,158 +419,70 @@
             width: 100%;
             box-sizing: border-box;
         }
-    
-        /* --- MEDIA QUERIES UNTUK TAMPILAN GADGET / HP --- */
-        @media screen and (max-width: 991px) {
-            .nav-container {
-                flex-direction: column; /* Mengubah Header menjadi Vertikal saat di HP */
-                gap: 15px;
-                padding: 10px 20px;
-            }
-
-            /* Mengubah Menu Navigasi menjadi Grid 2x2 saat di HP */
-            nav ul {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px 25px;
-            }
-
-            .container {
-                width: 100%;
-                padding: 0 20px;
-            }
-
-            .hero-container {
-                flex-direction: column-reverse; 
-                gap: 40px;
-                justify-content: center;
-            }
-
-            .hero-text-side {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hero-title {
-                font-size: 3.5em;
-            }
-
-            .hero-desc {
-                max-width: 100%;
-            }
-
-            .cta-buttons {
-                align-items: center;
-                max-width: 100%;
-            }
-
-            .hero-image-side {
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .nav-logo {
-                height: 50px;
-            }
-
-            .logo-text {
-                font-size: 19px;
-            }
-
-            .spotify-header h2.section-title {
-                font-size: 3.5em;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            nav ul li a {
-                font-size: 15px;
-            }
-            .spotify-player-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media screen and (max-width: 400px) {
-            /* Untuk Layar HP yang sangat kecil, menu Navigasi dijadikan 1 kolom penuh */
-            nav ul {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-        }
-
     </style>
 </head>
 
 <body>
     
-    <!-- POSTER SEKARANG BERADA DI BAGIAN PALING ATAS (DI LUAR & DI ATAS HEADER) -->
+    <!-- POSTER BANNER -->
     <div class="top-poster-banner">
-        <img src="images/CORTIS_POSTER.jpg" alt="CORTIS Poster Black and White">
+        <img src="Assets/images/CORTIS_POSTER.jpg" alt="CORTIS Poster Black and White">
     </div>
 
     <header>
         <div class="nav-container">
-            <a href="Home_page.html#home" class="nav-link logo-link" data-target="home-page">
-                <img src="images/CORTIS_Logo.jpg" alt="CORTIS Logo" class="nav-logo">
+            <a href="index.php" class="nav-link logo-link" data-target="home-page">
+                <img src="Assets/images/CORTIS_Logo.jpg" alt="CORTIS Logo" class="nav-logo">
                 <span class="logo-text">COERZONE</span>
             </a>
             <nav>
                 <ul>
-                    <li><a href="Home_page.html#home" class="nav-link active" data-target="home-page">Home</a></li>
-                    <li><a href="About.html">About</a></li>
-                    <li><a href="the music.html">#Stream Cortis</a></li>
-                    <li><a href="Store.html">Support</a></li>
+                    <li><a href="index.php" class="nav-link active" data-target="home-page">Home</a></li>
+                    <li><a href="About.php">About</a></li>
+                    <li><a href="the_music.php">#Stream Cortis</a></li>
+                    <li><a href="Store.php">Support</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <div class="container">
-
         <div id="home-page" class="page-content active">
             
             <div class="hero-container">
                 <div class="hero-text-side">
                     <h1 class="hero-title">Hello COER!</h1>
-                    
                     <p class="hero-desc sub-hero">Cortis : Color Outside The Line </p>
-                    
-                    <p class="hero-desc">An artist cherished for their music, performances, wit, and genuine friendships.
-                        What began as a small space to share guides and information has grown into something so much more.</p>
+                    <p class="hero-desc">An artist cherished for their music, performances, wit, and genuine friendships. What began as a small space to share guides and information has grown into something so much more.</p>
                     <p class="hero-desc">From a simple resource site to a full-fledged community hub – welcome to CORTIS : The Ultimate Guide.</p>
                     <p class="hero-desc">It's always been for CORTIS, for COERs, and for anyone discovering them today.🍀</p>
                     
                     <div class="cta-buttons">
-                        <a href="About.html" class="btn-tosca-main">Baby Coer? Start here!</a>
-                        <a href="the music.html" class="btn-dark-main">#STREAM CORTIS</a>
-                        <a href="Store.html" class="btn-border-dark">Support Today</a>
+                        <a href="About.php" class="btn-tosca-main">Baby Coer? Start here!</a>
+                        <a href="the_music.php" class="btn-dark-main">#STREAM CORTIS</a>
+                        <a href="Store.php" class="btn-border-dark">Support Today</a>
                     </div>
                 </div>
                 
                 <div class="hero-image-side">
-                    <img src="images/CORTIS.jpeg" alt="CORTIS Group Photo">
+                    <img src="Assets/images/CORTIS.jpeg" alt="CORTIS Group Photo">
                 </div>
             </div>
 
             <!-- BAGIAN GALERI -->
             <section id="members" style="margin-top: 40px; margin-bottom: 20px;">
                 <div class="grid-3">
-                    <!-- KARTU 1: ABOUT / BABY CORTIS -->
                     <div class="member-wrapper">
-                        <img src="images/CORTIS_1.GIF" alt="Cortis Members" class="member-img-box">
-                        <a href="About.html" class="member-btn btn-tosca-main">Baby Coer</a>
+                        <img src="Assets/images/CORTIS_1.GIF" alt="Cortis Members" class="member-img-box">
+                        <a href="About.php" class="member-btn btn-tosca-main">Baby Coer</a>
                     </div>
-                    <!-- KARTU 2: STREAM / THE MUSIC -->
                     <div class="member-wrapper">
-                        <img src="images/CORTIS_2.GIF" alt="Cortis Photo 2" class="member-img-box">
-                        <a href="the music.html" class="member-btn btn-dark-main">The Music</a>
+                        <img src="Assets/images/CORTIS_2.GIF" alt="Cortis Photo 2" class="member-img-box">
+                        <a href="the_music.php" class="member-btn btn-dark-main">The Music</a>
                     </div>
-                    <!-- KARTU 3: SUPPORT / STORE -->
                     <div class="member-wrapper">
-                        <img src="images/CORTIS_3.GIF" alt="Cortis Photo 3" class="member-img-box">
-                        <a href="Store.html" class="member-btn btn-border-dark">Store</a>
+                        <img src="Assets/images/CORTIS_3.GIF" alt="Cortis Photo 3" class="member-img-box">
+                        <a href="Store.php" class="member-btn btn-border-dark">Store</a>
                     </div>
                 </div>
             </section>
@@ -655,7 +518,7 @@
         <p>© 2026 Just Cortis | Unofficial fan-made website.</p>
     </footer>
 
-   <script>
+    <script>
         const navLinks = document.querySelectorAll('.nav-link[data-target]');
         const pages = document.querySelectorAll('.page-content');
         const headerNavLinks = document.querySelectorAll('nav ul li a');

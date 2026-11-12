@@ -1,0 +1,409 @@
+/* Animasi Perpindahan Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Variabel Warna Utama & Tipografi */
+:root {
+    --primary-color: #1a1a1a;
+    --secondary-color: #ffffff;
+    --accent-color: #00bac6; 
+    --text-color: #2b2b2b;
+    --primary-font: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+    --title-font: 'Syne', sans-serif;
+}
+
+body {
+    font-family: var(--primary-font);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--secondary-color);
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- STYLING POSTER PALING ATAS (DI ATAS HEADER) --- */
+.top-poster-banner {
+    width: 100%;
+    background-color: #1a1a1a;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 750px;
+}
+
+.top-poster-banner img {
+    width: 100%;
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center 40%; 
+    display: block;
+}
+
+/* --- NAVIGASI HEADER --- */
+header {
+    background: linear-gradient(to right, #1a1a1a 20%, #005f6b 65%, #008080 100%);
+    color: #fff;
+    padding: 0.8rem 0;
+    position: sticky;
+    top: 0; 
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+.nav-container {
+    width: 100%;            
+    max-width: 95%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box; 
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 15px; 
+}
+
+.nav-logo {
+    height: 55px;
+    width: auto;  
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo-text {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: 26px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    transition: color 0.2s;
+}
+
+.logo-link:hover .nav-logo {
+    transform: scale(1.05);
+}
+
+.logo-link:hover .logo-text {
+    color: var(--accent-color); 
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 35px;
+    align-items: center;
+}
+
+nav ul li {
+    text-align: center;
+}
+
+nav ul li a {
+    font-family: var(--primary-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+    white-space: nowrap;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    color: #fff;
+    border-bottom: 3px solid var(--accent-color);
+    padding-bottom: 5px;
+}
+
+/* --- HERO CONTAINER --- */
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    gap: 40px; 
+    background: transparent !important; 
+    box-shadow: none !important; 
+    padding: 40px 0;
+    margin-top: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.hero-text-side {
+    flex: 1.1; 
+    text-align: left;
+}
+
+.hero-image-side {
+    flex: 0.9;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    background: transparent !important;
+}
+
+.hero-title {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: 5.8em; 
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin: 0 0 15px 0;
+    color: #1a1a1a; 
+    text-transform: uppercase;
+}
+
+.hero-desc {
+    font-family: var(--primary-font);
+    font-size: 1.65em;
+    line-height: 1.5;
+    color: #2b2b2b;
+    margin-bottom: 18px;
+    max-width: 90%; 
+    letter-spacing: -0.2px;
+    font-weight: 400;
+}
+
+.hero-desc.sub-hero {
+    font-family: var(--title-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #008080; 
+    font-size: 2.1em; 
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.hero-image-side img {
+    width: 100%;
+    max-width: 100%; 
+    height: auto !important;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08); 
+}
+
+/* --- CTA BUTTONS --- */
+.cta-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 320px; 
+}
+
+.cta-buttons a, .member-btn {
+    font-family: var(--primary-font);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 14px 24px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.15em; 
+    border-radius: 30px;
+    transition: transform 0.2s, background-color 0.2s, color 0.2s;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cta-buttons a:hover, .member-btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-tosca-main { 
+    background-color: #008080; 
+    color: #ffffff;
+}
+.btn-tosca-main:hover {
+    background-color: #005f6b;
+}
+
+.btn-dark-main { 
+    background-color: #1a1a1a; 
+    color: #ffffff;
+}
+.btn-dark-main:hover {
+    background-color: #333333;
+}
+
+.btn-border-dark { 
+    background-color: transparent;
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
+    padding: 12px 22px; 
+}
+.btn-border-dark:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.container {
+    width: 100%;
+    max-width: 90%; 
+    margin: 10px auto;
+    padding: 0 20px;   
+    min-height: 50vh;
+    box-sizing: border-box;
+}
+
+.page-content {
+    display: none;
+    background: #fff;
+    padding: 40px; 
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#home-page.page-content {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0;
+}
+
+.page-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2.section-title {
+    font-family: var(--title-font);
+    font-size: 2.4em; 
+    color: var(--primary-color);
+    border-bottom: 3px solid #008080;
+    padding-bottom: 10px;
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.member-wrapper {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.member-img-box {
+    width: 100%;
+    height: 420px; 
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.spotify-header {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.spotify-header h2.section-title {
+    font-family: var(--title-font);
+    font-weight: 800;
+    font-size: 5.8em; 
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin: 0 0 15px 0;
+    color: #1a1a1a; 
+    text-transform: uppercase;
+    border-bottom: none; 
+    padding-bottom: 0;
+}
+
+.spotify-player-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    margin: 60px auto; 
+    width: 100%; 
+    justify-content: center;
+}
+
+.spotify-frame {
+    width: 100%; 
+    height: 300px; 
+    border: none;
+    border-radius: 12px;
+}
+
+.cookie-banner {
+    font-family: var(--primary-font);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.95em;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.cookie-banner button {
+    font-family: var(--primary-font);
+    background: white;
+    color: #222;
+    border: none;
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+footer {
+    font-family: var(--primary-font);
+    background: linear-gradient(to right, #1a1a1a 20%, #005f6b 65%, #008080 100%);
+    color: #ccc;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.95em;
+    margin-top: 40px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+}

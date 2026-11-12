@@ -17,7 +17,7 @@ height:70vh;
 background:
 linear-gradient(rgba(0,0,0,.7),
 rgba(0,0,0,.7)),
-url(images/banner.jpg);
+url(images/banner.jpg); /* Diubah ke Assets/images/banner.jpg jika gambar ada di dalam folder Assets */
 
 background-size:cover;
 background-position:center;

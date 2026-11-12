@@ -11,7 +11,7 @@
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #ffffff;
-            background: linear-gradient(rgba(10, 10, 15, 0.85), rgba(10, 10, 15, 0.95)), url('images/Cover.png') no-repeat center center fixed;
+            background: linear-gradient(rgba(10, 10, 15, 0.85), rgba(10, 10, 15, 0.95)), url('Assets/images/Cover.png') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -333,13 +333,13 @@
             <span class="bracket-left">[</span><span class="logo-text">COERZONE</span><span class="bracket-right">]</span>
         </div>
         <div class="nav-links">
-            <a href="Home_page.html">Home</a>
+            <a href="index.php">Home</a>
             <span class="separator">|</span>
-            <a href="About.html">About</a>
+            <a href="About.php">About</a>
             <span class="separator">|</span>
-            <a href="Store.html">Store</a>
+            <a href="Store.php">Store</a>
             <span class="separator">|</span>
-            <a href="#" class="active">The Music</a>
+            <a href="the_music.php" class="active">The Music</a>
         </div>
     </nav>
 
@@ -352,7 +352,7 @@
         <!-- EP 1: Color Outside the Lines -->
         <div class="album-card">
             <div class="album-info">
-                <img src="images/Color Outside the Lines.png" alt="Color Outside the Lines Cover" class="album-cover">
+                <img src="Assets/images/Color Outside the Lines.png" alt="Color Outside the Lines Cover" class="album-cover">
                 <h3 class="album-title">Color Outside the Lines</h3>
                 <p class="album-meta">1st EP • Sep 8, 2025</p>
                 <p class="album-desc">A statement on self-discovery, embracing imperfections, and rejecting conventional societal rules and standards.</p>
@@ -361,7 +361,7 @@
                 <!-- 1. GO! -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/GO!.png" alt="GO! Cover" class="track-cover">
+                        <img src="Assets/images/GO!.png" alt="GO! Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">1. GO!</span>
                             <span class="track-date">Released: Aug 11, 2025</span>
@@ -376,7 +376,7 @@
                 <!-- 2. What You Want -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/What You Want.png" alt="What You Want Cover" class="track-cover">
+                        <img src="Assets/images/What You Want.png" alt="What You Want Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">2. What You Want</span>
                             <span class="track-date">Released: Aug 18, 2025</span>
@@ -391,7 +391,7 @@
                 <!-- 3. FaSHioN -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/FaSHioN.png" alt="FaSHioN Cover" class="track-cover">
+                        <img src="Assets/images/FaSHioN.png" alt="FaSHioN Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">3. FaSHioN</span>
                             <span class="track-date">Released: Sep 8, 2025</span>
@@ -406,7 +406,7 @@
                 <!-- 4. JoyRide -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/JoyRide.png" alt="JoyRide Cover" class="track-cover">
+                        <img src="Assets/images/JoyRide.png" alt="JoyRide Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">4. JoyRide</span>
                             <span class="track-date">Released: Sep 8, 2025</span>
@@ -421,7 +421,7 @@
                 <!-- 5. Lullaby -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/Lullaby.png" alt="Lullaby Cover" class="track-cover">
+                        <img src="Assets/images/Lullaby.png" alt="Lullaby Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">5. Lullaby</span>
                             <span class="track-date">Released: Sep 8, 2025</span>
@@ -436,7 +436,7 @@
                 <!-- 6. What You Want (feat. Teezo Touchdown) -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/What You Want (feat. Teezo Touchdown).png" alt="What You Want Remix Cover" class="track-cover">
+                        <img src="Assets/images/What You Want (feat. Teezo Touchdown).png" alt="What You Want Remix Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">6. What You Want (feat. Teezo Touchdown)</span>
                             <span class="track-date">Released: Aug 22, 2025</span>
@@ -453,7 +453,7 @@
         <!-- EP 2: GreenGreen -->
         <div class="album-card">
             <div class="album-info">
-                <img src="images/GreenGreen.png" alt="GreenGreen Cover" class="album-cover">
+                <img src="Assets/images/GreenGreen.png" alt="GreenGreen Cover" class="album-cover">
                 <h3 class="album-title">GreenGreen</h3>
                 <p class="album-meta">2nd EP • May 4, 2026</p>
                 <p class="album-desc">Represents CORTIS's mature principles, dividing priorities into "Green" (pursuits) and "Red" (red flags/social pressures to reject).</p>
@@ -462,7 +462,7 @@
                 <!-- 1. TNT -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/TNT.png" alt="TNT Cover" class="track-cover">
+                        <img src="Assets/images/TNT.png" alt="TNT Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">1. TNT</span>
                             <span class="track-date">Released: May 4, 2026</span>
@@ -477,7 +477,7 @@
                 <!-- 2. RedRed -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/RedRed.png" alt="RedRed Cover" class="track-cover">
+                        <img src="Assets/images/RedRed.png" alt="RedRed Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">2. RedRed</span>
                             <span class="track-date">Released: Apr 20, 2026</span>
@@ -492,7 +492,7 @@
                 <!-- 3. Acai -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/Acai.png" alt="Acai Cover" class="track-cover">
+                        <img src="Assets/images/Acai.png" alt="Acai Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">3. Acai</span>
                             <span class="track-date">Released: May 4, 2026</span>
@@ -507,7 +507,7 @@
                 <!-- 4. YoungCreatorCrew -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/YoungCreatorCrew.png" alt="YoungCreatorCrew Cover" class="track-cover">
+                        <img src="Assets/images/YoungCreatorCrew.png" alt="YoungCreatorCrew Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">4. YoungCreatorCrew</span>
                             <span class="track-date">Released: May 4, 2026</span>
@@ -522,7 +522,7 @@
                 <!-- 5. Wassup -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/Wassup.png" alt="Wassup Cover" class="track-cover">
+                        <img src="Assets/images/Wassup.png" alt="Wassup Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">5. Wassup</span>
                             <span class="track-date">Released: May 4, 2026</span>
@@ -537,7 +537,7 @@
                 <!-- 6. Blue Lips -->
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/Blue Lips.png" alt="Blue Lips Cover" class="track-cover">
+                        <img src="Assets/images/Blue Lips.png" alt="Blue Lips Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">6. Blue Lips</span>
                             <span class="track-date">Released: May 4, 2026</span>
@@ -554,7 +554,7 @@
         <!-- SINGLE 1: Mention Me -->
         <div class="album-card">
             <div class="album-info">
-                <img src="images/Mention Me.png" alt="Mention Me Cover" class="album-cover">
+                <img src="Assets/images/Mention Me.png" alt="Mention Me Cover" class="album-cover">
                 <h3 class="album-title">Mention Me</h3>
                 <p class="album-meta">Digital Single • Feb 13, 2026</p>
                 <p class="album-desc">Released as the Official Soundtrack (OST) for the American animated sports comedy film "GOAT".</p>
@@ -562,7 +562,7 @@
             <div class="tracklist">
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/Mention Me (2).png" alt="Mention Me Track Cover" class="track-cover">
+                        <img src="Assets/images/Mention Me (2).png" alt="Mention Me Track Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">1. Mention Me</span>
                             <span class="track-date">Released: Feb 13, 2026</span>
@@ -579,7 +579,7 @@
         <!-- SINGLE 2: It's Me X Redred -->
         <div class="album-card">
             <div class="album-info">
-                <img src="images/It's Me X Redred.png" alt="It's Me X Redred Cover" class="album-cover">
+                <img src="Assets/images/It's Me X Redred.png" alt="It's Me X Redred Cover" class="album-cover">
                 <h3 class="album-title">It's Me X Redred</h3>
                 <p class="album-meta">Digital Single • Jun 5, 2026</p>
                 <p class="album-desc">An exclusive digital mashup track distributed on YouTube, combining the beats of CORTIS's "RedRed" with "It's Me".</p>
@@ -587,7 +587,7 @@
             <div class="tracklist">
                 <div class="track-item">
                     <div class="track-details-wrapper">
-                        <img src="images/It's Me X Redred (2).png" alt="It's Me X Redred Track Cover" class="track-cover">
+                        <img src="Assets/images/It's Me X Redred (2).png" alt="It's Me X Redred Track Cover" class="track-cover">
                         <div class="track-info">
                             <span class="track-name">1. It's Me X Redred</span>
                             <span class="track-date">Released: Jun 5, 2026</span>
