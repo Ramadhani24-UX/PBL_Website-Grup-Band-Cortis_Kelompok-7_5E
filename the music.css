@@ -1,0 +1,545 @@
+/* === GLOBAL STYLES & ROOT VARIABLES === */
+
+:root {
+    --bg-main: #0b0c10;
+    --bg-secondary: #1f2833;
+    --text-light: #c5c6c7;
+    --text-white: #ffffff;
+    --accent-cyan: #66fcf1;
+    --accent-teal: #45a29e;
+    --accent-pink: #ff007f;
+    --accent-green: #00ff88;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 120px;
+    /* Ruang untuk sticky player */
+    color: var(--text-light);
+    /* === MENGATUR GAMBAR BACKGROUND === */
+    /* Memadukan overlay gradasi gelap (85% transparansi) dengan gambar Background.png */
+    background: linear-gradient(135deg, rgba(11, 12, 16, 0.85) 0%, rgba(26, 26, 36, 0.85) 100%), url('Background.png');
+    background-size: cover;
+    /* Membuat gambar memenuhi seluruh layar */
+    background-position: center;
+    /* Memposisikan gambar di tengah */
+    background-attachment: fixed;
+    /* Membuat gambar tidak ikut tergulir (efek parallax) */
+    background-repeat: no-repeat;
+    /* Mencegah gambar berulang seperti ubin */
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-white);
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--accent-cyan);
+}
+
+
+/* === HEADER / NAVIGASI === */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(11, 12, 16, 0.8);
+    backdrop-filter: blur(10px);
+    /* Efek blur kaca */
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+nav {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+nav a {
+    margin: 0 15px;
+    padding: 5px 0;
+}
+
+nav a.active {
+    color: var(--accent-cyan);
+    border-bottom: 2px solid var(--accent-cyan);
+    border-radius: 0;
+    padding: 5px 0;
+    background: transparent;
+}
+
+
+/* === HERO SECTION === */
+
+.hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+}
+
+.hero h1 {
+    font-weight: 900;
+    letter-spacing: 15px;
+    margin-bottom: 10px;
+    font-size: 3.5rem;
+    color: var(--text-white);
+    text-shadow: 0 0 20px rgba(102, 252, 241, 0.5);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--accent-teal);
+    margin-top: 0;
+}
+
+
+/* === KATALOG DISKOGRAFI & GRID ALBUM === */
+
+.katalog-section {
+    padding: 20px 60px;
+}
+
+.katalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.katalog-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--text-white);
+}
+
+.katalog-header select {
+    padding: 8px 15px;
+    background: var(--bg-secondary);
+    color: var(--text-white);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 20px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.album-grid {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    padding-bottom: 30px;
+    align-items: flex-start;
+    scroll-behavior: smooth;
+}
+
+.album-card {
+    width: 320px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s;
+}
+
+.album-card:hover {
+    box-shadow: 0 8px 32px rgba(102, 252, 241, 0.2);
+}
+
+
+/* Bagian Header Album yang bisa diklik */
+
+.album-header {
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.album-header:hover {
+    transform: translateY(-10px);
+}
+
+.album-cover-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: block;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.album-title {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--text-white);
+}
+
+.click-hint {
+    font-size: 0.85rem;
+    color: var(--accent-pink);
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    60% {
+        transform: translateY(-3px);
+    }
+}
+
+
+/* === DAFTAR LAGU (TRACKLIST) === */
+
+.tracklist-container {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 15px;
+    width: 100%;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid transparent;
+    transition: all 0.3s;
+}
+
+.track-item:hover {
+    background: linear-gradient(90deg, rgba(102, 252, 241, 0.1), transparent);
+    border: 1px solid var(--accent-cyan);
+    transform: translateX(5px);
+    cursor: pointer;
+}
+
+.track-cover {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.track-info-detail {
+    text-align: left;
+}
+
+.track-info-detail strong {
+    font-size: 0.95rem;
+    color: var(--text-white);
+    display: block;
+    margin-bottom: 3px;
+}
+
+.track-info-detail span {
+    font-size: 0.8rem;
+    color: var(--accent-teal);
+}
+
+
+/* === AREA INTERAKTIF === */
+
+.interaktif-section {
+    padding: 20px 60px;
+    margin-top: 20px;
+}
+
+.interaktif-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: var(--text-white);
+}
+
+.interaktif-section h2 span {
+    font-weight: normal;
+    font-size: 1rem;
+    color: var(--accent-teal);
+}
+
+.interaktif-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    background: var(--glass-bg);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+}
+
+.lagu-cover-img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: block;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.lagu-info {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.lagu-info h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--text-white);
+    text-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.lagu-info p {
+    margin: 5px 0 0;
+    font-size: 1rem;
+    color: var(--text-light);
+}
+
+.left-panel button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 25px;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-white);
+    transition: all 0.3s;
+}
+
+.left-panel button:nth-of-type(1) {
+    background: linear-gradient(45deg, var(--accent-pink), #ff5e62);
+    box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
+}
+
+.left-panel button:nth-of-type(1):hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+}
+
+.left-panel button:nth-of-type(2) {
+    background: #1DB954;
+}
+
+
+/* Spotify Green */
+
+.left-panel button:nth-of-type(2):hover {
+    background: #1ed760;
+    transform: scale(1.05);
+}
+
+.right-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid var(--glass-border);
+    margin-bottom: 15px;
+}
+
+.tab {
+    padding: 12px 25px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 10px 10px 0 0;
+    transition: all 0.3s;
+}
+
+.tab:hover {
+    color: var(--text-white);
+}
+
+.tab.active {
+    background: var(--glass-bg);
+    color: var(--accent-cyan);
+    border-bottom: 3px solid var(--accent-cyan);
+}
+
+.tab-content {
+    padding: 20px;
+    height: 260px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+}
+
+.tab-content p {
+    margin: 0;
+    line-height: 1.8;
+    color: var(--text-white);
+    font-size: 1.05rem;
+}
+
+
+/* === FOOTER & STICKY PLAYER === */
+
+footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.9rem;
+    color: var(--accent-teal);
+}
+
+.sticky-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(11, 12, 16, 0.95);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid var(--accent-cyan);
+    padding: 15px 60px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.player-controls {
+    display: flex;
+    gap: 15px;
+    margin-right: 40px;
+}
+
+.player-controls button {
+    border: none;
+    background: var(--glass-bg);
+    color: var(--text-white);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+
+.player-controls button:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-main);
+    transform: scale(1.1);
+}
+
+.player-info {
+    font-weight: bold;
+    margin-right: 30px;
+    min-width: 250px;
+    color: var(--text-white);
+}
+
+.player-info span {
+    color: var(--accent-green);
+    font-size: 0.9rem;
+    font-weight: normal;
+    display: block;
+}
+
+.progress-bar-container {
+    flex-grow: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-bar-fill {
+    width: 35%;
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+    box-shadow: 0 0 10px var(--accent-green);
+}
+
+.progress-bar-handle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--text-white);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    position: absolute;
+    top: -3px;
+    left: 35%;
+}
+
+
+/* Custom Scrollbar agar cocok dengan tema */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-teal);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}
