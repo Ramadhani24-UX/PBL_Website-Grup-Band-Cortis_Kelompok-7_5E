@@ -1,21 +1,62 @@
+<?php
+require_once 'Admin/connection.php';
+
+function resolveImagePath($path, $default) {
+    if (empty($path)) return $default;
+    if (file_exists($path)) return $path;
+    if (file_exists('Assets/images/' . $path)) return 'Assets/images/' . $path;
+    if (file_exists('Admin/' . $path)) return 'Admin/' . $path;
+    if (file_exists('Admin/uploads/' . $path)) return 'Admin/uploads/' . $path;
+    return $default;
+}
+
+// 1. Ambil Data Group Profile
+$q_group = mysqli_query($conn, "SELECT * FROM group_profile LIMIT 1");
+$group   = ($q_group && mysqli_num_rows($q_group) > 0) ? mysqli_fetch_assoc($q_group) : null;
+
+$group_name   = $group['group_name'] ?? 'CORTIS';
+$name_meaning = $group['name_meaning'] ?? 'Color Outside The Line';
+$biography    = $group['biography'] ?? "An artist cherished for their music, performances, wit, and genuine friendships. What began as a small space to share guides and information has grown into something so much more.\nFrom a simple resource site to a full-fledged community hub – welcome to CORTIS : The Ultimate Guide.\nIt's always been for CORTIS, for COERs, and for anyone discovering them today.🍀";
+$banner_img   = resolveImagePath($group['banner_path'] ?? '', 'Assets/images/CORTIS_POSTER.jpg');
+
+// 2. Ambil 3 Data Gallery Utama
+$q_gallery = mysqli_query($conn, "SELECT * FROM gallery ORDER BY display_order ASC, image_id ASC LIMIT 3");
+$gallery_items = [];
+if ($q_gallery) {
+    while ($row = mysqli_fetch_assoc($q_gallery)) {
+        $gallery_items[] = $row;
+    }
+}
+
+// 3. Ambil 2 Lagu Terpopuler berdasarkan play_count tertinggi dari tabel tracks untuk Spotify Player
+$q_top_tracks = mysqli_query($conn, "SELECT * FROM tracks WHERE spotify_url IS NOT NULL AND spotify_url != '' ORDER BY play_count DESC, track_id ASC LIMIT 2");
+$spotify_embeds = [];
+if ($q_top_tracks) {
+    while ($t = mysqli_fetch_assoc($q_top_tracks)) {
+        $embed_url = str_replace('open.spotify.com/track/', 'open.spotify.com/embed/track/', $t['spotify_url']);
+        $spotify_embeds[] = [
+            'title'      => $t['title'],
+            'play_count' => $t['play_count'],
+            'embed_url'  => $embed_url
+        ];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTIS: The Ultimate Guide</title>
+    <title><?= htmlspecialchars($group_name) ?>: The Ultimate Guide</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Memuat Font Syne (untuk Judul Utama) dan Outfit (untuk Teks Tegas & Navigasi Premium) -->
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Animasi Perpindahan Scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Variabel Warna Utama & Tipografi */
         :root {
             --primary-color: #1a1a1a;
             --secondary-color: #ffffff;
@@ -36,7 +77,6 @@
             overflow-x: hidden;
         }
 
-        /* --- STYLING POSTER PALING ATAS (DI ATAS HEADER) --- */
         .top-poster-banner {
             width: 100%;
             background-color: #1a1a1a;
@@ -55,7 +95,6 @@
             display: block;
         }
 
-        /* --- NAVIGASI HEADER --- */
         header {
             background: linear-gradient(to right, #1a1a1a 20%, #005f6b 65%, #008080 100%);
             color: #fff;
@@ -142,7 +181,6 @@
             padding-bottom: 5px;
         }
 
-        /* --- HERO CONTAINER --- */
         .hero-container {
             display: flex;
             align-items: center;
@@ -210,7 +248,6 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08); 
         }
 
-        /* --- CTA BUTTONS --- */
         .cta-buttons {
             display: flex;
             flex-direction: column;
@@ -247,7 +284,7 @@
             background-color: #008080; 
             color: #ffffff;
         }
-        .btn-tosca-main:hover {
+        .btn-tosca-main:hover { 
             background-color: #005f6b;
         }
 
@@ -255,7 +292,7 @@
             background-color: #1a1a1a; 
             color: #ffffff;
         }
-        .btn-dark-main:hover {
+        .btn-dark-main:hover { 
             background-color: #333333;
         }
 
@@ -265,7 +302,7 @@
             border: 2px solid #1a1a1a;
             padding: 12px 22px; 
         }
-        .btn-border-dark:hover {
+        .btn-border-dark:hover { 
             background-color: #1a1a1a;
             color: #ffffff;
         }
@@ -424,9 +461,9 @@
 
 <body>
     
-    <!-- POSTER BANNER -->
+    <!-- POSTER BANNER DARI DATABASE group_profile -->
     <div class="top-poster-banner">
-        <img src="Assets/images/CORTIS_POSTER.jpg" alt="CORTIS Poster Black and White">
+        <img src="<?= htmlspecialchars($banner_img) ?>" alt="<?= htmlspecialchars($group_name) ?> Poster">
     </div>
 
     <header>
@@ -439,7 +476,7 @@
                 <ul>
                     <li><a href="index.php" class="nav-link active" data-target="home-page">Home</a></li>
                     <li><a href="About.php">About</a></li>
-                    <li><a href="the_music.php">#Stream Cortis</a></li>
+                    <li><a href="The_Music.php">#Stream Cortis</a></li>
                     <li><a href="Store.php">Support</a></li>
                 </ul>
             </nav>
@@ -452,14 +489,18 @@
             <div class="hero-container">
                 <div class="hero-text-side">
                     <h1 class="hero-title">Hello COER!</h1>
-                    <p class="hero-desc sub-hero">Cortis : Color Outside The Line </p>
-                    <p class="hero-desc">An artist cherished for their music, performances, wit, and genuine friendships. What began as a small space to share guides and information has grown into something so much more.</p>
-                    <p class="hero-desc">From a simple resource site to a full-fledged community hub – welcome to CORTIS : The Ultimate Guide.</p>
-                    <p class="hero-desc">It's always been for CORTIS, for COERs, and for anyone discovering them today.🍀</p>
+                    <p class="hero-desc sub-hero"><?= htmlspecialchars($group_name) ?> : <?= htmlspecialchars($name_meaning) ?></p>
+                    <?php
+                    foreach (explode("\n", trim($biography)) as $p) {
+                        if (trim($p) !== '') {
+                            echo '<p class="hero-desc">' . htmlspecialchars(trim($p)) . '</p>';
+                        }
+                    }
+                    ?>
                     
                     <div class="cta-buttons">
                         <a href="About.php" class="btn-tosca-main">Baby Coer? Start here!</a>
-                        <a href="the_music.php" class="btn-dark-main">#STREAM CORTIS</a>
+                        <a href="The_Music.php" class="btn-dark-main">#STREAM CORTIS</a>
                         <a href="Store.php" class="btn-border-dark">Support Today</a>
                     </div>
                 </div>
@@ -469,41 +510,53 @@
                 </div>
             </div>
 
-            <!-- BAGIAN GALERI -->
+            <!-- BAGIAN GALERI DARI DATABASE gallery -->
             <section id="members" style="margin-top: 40px; margin-bottom: 20px;">
                 <div class="grid-3">
+                    <?php
+                    $cards_config = [
+                        ['default_img' => 'Assets/images/CORTIS_1.GIF', 'default_title' => 'Baby Coer', 'link' => 'About.php', 'btn_class' => 'btn-tosca-main'],
+                        ['default_img' => 'Assets/images/CORTIS_2.GIF', 'default_title' => 'The Music', 'link' => 'The_Music.php', 'btn_class' => 'btn-dark-main'],
+                        ['default_img' => 'Assets/images/CORTIS_3.GIF', 'default_title' => 'Store', 'link' => 'Store.php', 'btn_class' => 'btn-border-dark'],
+                    ];
+                    for ($i = 0; $i < 3; $i++) :
+                        $img_src = isset($gallery_items[$i]) ? resolveImagePath($gallery_items[$i]['image_path'], $cards_config[$i]['default_img']) : $cards_config[$i]['default_img'];
+                        $btn_label = !empty($gallery_items[$i]['title']) ? $gallery_items[$i]['title'] : $cards_config[$i]['default_title'];
+                    ?>
                     <div class="member-wrapper">
-                        <img src="Assets/images/CORTIS_1.GIF" alt="Cortis Members" class="member-img-box">
-                        <a href="About.php" class="member-btn btn-tosca-main">Baby Coer</a>
+                        <img src="<?= htmlspecialchars($img_src) ?>" alt="<?= htmlspecialchars($btn_label) ?>" class="member-img-box">
+                        <a href="<?= $cards_config[$i]['link'] ?>" class="member-btn <?= $cards_config[$i]['btn_class'] ?>"><?= htmlspecialchars($btn_label) ?></a>
                     </div>
-                    <div class="member-wrapper">
-                        <img src="Assets/images/CORTIS_2.GIF" alt="Cortis Photo 2" class="member-img-box">
-                        <a href="the_music.php" class="member-btn btn-dark-main">The Music</a>
-                    </div>
-                    <div class="member-wrapper">
-                        <img src="Assets/images/CORTIS_3.GIF" alt="Cortis Photo 3" class="member-img-box">
-                        <a href="Store.php" class="member-btn btn-border-dark">Store</a>
-                    </div>
+                    <?php endfor; ?>
                 </div>
             </section>
         </div>
 
-        <!-- Kotak Audio Player -->
+        <!-- Kotak Audio Player (Diurutkan berdasarkan play_count tertinggi dari tabel tracks) -->
         <div class="spotify-header">
-            <h2 class="section-title">Listen to CORTIS </h2>
+            <h2 class="section-title">Listen to <?= htmlspecialchars($group_name) ?> </h2>
             <h2>Check out our latest and most popular tracks directly on Spotify</h2>
         </div>
 
         <div class="spotify-player-container">
-            <iframe class="spotify-frame"
-                src="https://open.spotify.com/embed/track/4ecdsGz3Hg6TKPwQ0ZOdJz?utm_source=generator&si=a2bfa6203b5c4a35"  
-                frameBorder="0">
-            </iframe>
+            <?php if (!empty($spotify_embeds)) : ?>
+                <?php foreach ($spotify_embeds as $sp) : ?>
+                    <iframe class="spotify-frame"
+                        src="<?= htmlspecialchars($sp['embed_url']) ?>"
+                        frameBorder="0">
+                    </iframe>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <iframe class="spotify-frame"
+                    src="https://open.spotify.com/embed/track/4ecdsGz3Hg6TKPwQ0ZOdJz?utm_source=generator&si=a2bfa6203b5c4a35"  
+                    frameBorder="0">
+                </iframe>
 
-            <iframe class="spotify-frame"
-                src="https://open.spotify.com/embed/track/2fCwv2ppU5nTRTckomIGsd?utm_source=generator&si=def6346139ce47e2"  
-                frameBorder="0">
-            </iframe>
+                <iframe class="spotify-frame"
+                    src="https://open.spotify.com/embed/track/2fCwv2ppU5nTRTckomIGsd?utm_source=generator&si=def6346139ce47e2"  
+                    frameBorder="0">
+                </iframe>
+            <?php endif; ?>
         </div>
     </div> 
 
@@ -514,44 +567,11 @@
     </div>
 
     <footer>
-        <p><em>Built with love by Fans, for Fans — always united for CORTIS.</em></p>
+        <p><em>Built with love by Fans, for Fans — always united for <?= htmlspecialchars($group_name) ?>.</em></p>
         <p>© 2026 Just Cortis | Unofficial fan-made website.</p>
     </footer>
 
     <script>
-        const navLinks = document.querySelectorAll('.nav-link[data-target]');
-        const pages = document.querySelectorAll('.page-content');
-        const headerNavLinks = document.querySelectorAll('nav ul li a');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const targetPageId = this.getAttribute('data-target');
-                
-                if (targetPageId) {
-                    e.preventDefault();
-                    
-                    headerNavLinks.forEach(item => {
-                        if(item.getAttribute('data-target') === targetPageId) {
-                            item.classList.add('active');
-                        } else {
-                            item.classList.remove('active');
-                        }
-                    });
-
-                    pages.forEach(page => page.classList.remove('active'));
-                    const targetPage = document.getElementById(targetPageId);
-                    if(targetPage) {
-                        targetPage.classList.add('active');
-                    }
-                    
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
         function closeCookie() {
             document.getElementById('cookieBanner').style.display = 'none';
         }
