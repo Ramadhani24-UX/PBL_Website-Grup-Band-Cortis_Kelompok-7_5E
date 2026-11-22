@@ -1,3 +1,31 @@
+<?php
+require_once 'Admin/connection.php';
+
+function resolveImagePath($path, $default) {
+    if (empty($path)) return $default;
+    if (file_exists($path)) return $path;
+    if (file_exists('Assets/images/' . $path)) return 'Assets/images/' . $path;
+    if (file_exists('Admin/' . $path)) return 'Admin/' . $path;
+    if (file_exists('Admin/uploads/' . $path)) return 'Admin/uploads/' . $path;
+    return $default;
+}
+
+// 1. Ambil daftar semua album untuk opsi dropdown filter
+$q_album_list = mysqli_query($conn, "SELECT album_id, title, release_type FROM albums ORDER BY release_date ASC, album_id ASC");
+
+// 2. Tangkap parameter filter & search (GET)
+$selected_album = isset($_GET['album_id']) ? (int) $_GET['album_id'] : 0;
+$search_query   = isset($_GET['search']) ? trim($_GET['search']) : '';
+$search_esc     = mysqli_real_escape_string($conn, $search_query);
+
+// 3. Query album yang ditampilkan
+$sql_albums = "SELECT * FROM albums";
+if ($selected_album > 0) {
+    $sql_albums .= " WHERE album_id = $selected_album";
+}
+$sql_albums .= " ORDER BY release_date ASC, album_id ASC";
+$q_albums = mysqli_query($conn, $sql_albums);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,7 +126,7 @@
 
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
 
         .section-header h2 {
@@ -114,6 +142,71 @@
             color: #d4d4d8;
             font-size: 1.1rem;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- Search & Dropdown Filter Bar --- */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 50px;
+            background-color: rgba(20, 20, 30, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 18px 22px;
+            border-radius: 12px;
+            border: 1px solid #0ff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #a855f7;
+            background-color: rgba(15, 15, 22, 0.95);
+            color: #ffffff;
+            font-size: 0.95rem;
+            min-width: 230px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .filter-bar button,
+        .filter-bar a.reset-btn {
+            padding: 10px 22px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .filter-bar button {
+            background: linear-gradient(to right, #0ff, #a855f7);
+            color: #0a0a0f;
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+        }
+
+        .filter-bar button:hover,
+        .filter-bar a.reset-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .filter-bar a.reset-btn {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         /* --- Album Card Layout --- */
@@ -339,7 +432,7 @@
             <span class="separator">|</span>
             <a href="Store.php">Store</a>
             <span class="separator">|</span>
-            <a href="the_music.php" class="active">The Music</a>
+            <a href="The_Music.php" class="active">The Music</a>
         </div>
     </nav>
 
@@ -349,257 +442,96 @@
             <p>Explore the complete discography of CORTIS.</p>
         </div>
 
-        <!-- EP 1: Color Outside the Lines -->
-        <div class="album-card">
-            <div class="album-info">
-                <img src="Assets/images/Color Outside the Lines.png" alt="Color Outside the Lines Cover" class="album-cover">
-                <h3 class="album-title">Color Outside the Lines</h3>
-                <p class="album-meta">1st EP • Sep 8, 2025</p>
-                <p class="album-desc">A statement on self-discovery, embracing imperfections, and rejecting conventional societal rules and standards.</p>
-            </div>
-            <div class="tracklist">
-                <!-- 1. GO! -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/GO!.png" alt="GO! Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">1. GO!</span>
-                            <span class="track-date">Released: Aug 11, 2025</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/6OWWZtNQORY1McaZmOrwhc" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=WXS-o57VJ5w" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
+        <!-- FITUR SEARCH LAGU & DROPDOWN FILTER ALBUMS -->
+        <form method="GET" action="The_Music.php" class="filter-bar">
+            <input type="text" name="search" placeholder="Search track title..." value="<?= htmlspecialchars($search_query) ?>">
+            <select name="album_id">
+                <option value="0">-- All Albums & Singles --</option>
+                <?php if ($q_album_list) : ?>
+                    <?php while ($opt = mysqli_fetch_assoc($q_album_list)) : ?>
+                        <option value="<?= (int)$opt['album_id'] ?>" <?= ($selected_album === (int)$opt['album_id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($opt['title']) ?> (<?= htmlspecialchars($opt['release_type']) ?>)
+                        </option>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </select>
+            <button type="submit">Search / Filter</button>
+            <?php if ($selected_album > 0 || $search_query !== '') : ?>
+                <a href="The_Music.php" class="reset-btn">Reset</a>
+            <?php endif; ?>
+        </form>
+
+        <?php 
+        $found_any = false;
+        if ($q_albums && mysqli_num_rows($q_albums) > 0) : 
+            while ($album = mysqli_fetch_assoc($q_albums)) : 
+                $album_id = (int) $album['album_id'];
+                
+                $sql_tracks = "SELECT * FROM tracks WHERE album_id = $album_id";
+                if ($search_query !== '') {
+                    $sql_tracks .= " AND title LIKE '%$search_esc%'";
+                }
+                $sql_tracks .= " ORDER BY track_number ASC, track_id ASC";
+                $q_tracks = mysqli_query($conn, $sql_tracks);
+
+                // Jika sedang mencari judul lagu tertentu dan tidak ada lagu yang cocok di album ini, lewati album
+                if ($search_query !== '' && (!$q_tracks || mysqli_num_rows($q_tracks) === 0)) {
+                    continue;
+                }
+                $found_any = true;
+
+                $album_cover = resolveImagePath($album['cover_path'], 'Assets/images/Cover.png');
+                $album_date  = !empty($album['release_date']) ? date('M j, Y', strtotime($album['release_date'])) : '';
+                $meta_label  = !empty($album['release_label']) ? $album['release_label'] : $album['release_type'];
+        ?>
+            <div class="album-card">
+                <div class="album-info">
+                    <img src="<?= htmlspecialchars($album_cover) ?>" alt="<?= htmlspecialchars($album['title']) ?> Cover" class="album-cover">
+                    <h3 class="album-title"><?= htmlspecialchars($album['title']) ?></h3>
+                    <p class="album-meta"><?= htmlspecialchars($meta_label) ?><?= $album_date ? ' • ' . $album_date : '' ?></p>
+                    <p class="album-desc"><?= htmlspecialchars($album['description'] ?? '') ?></p>
                 </div>
 
-                <!-- 2. What You Want -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/What You Want.png" alt="What You Want Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">2. What You Want</span>
-                            <span class="track-date">Released: Aug 18, 2025</span>
+                <div class="tracklist">
+                    <?php if ($q_tracks && mysqli_num_rows($q_tracks) > 0) : ?>
+                        <?php $no = 1; while ($track = mysqli_fetch_assoc($q_tracks)) : 
+                            $track_num   = !empty($track['track_number']) ? $track['track_number'] : $no;
+                            $track_cover = resolveImagePath($track['cover_path'], $album_cover);
+                            $track_date  = !empty($track['release_date']) ? date('M j, Y', strtotime($track['release_date'])) : $album_date;
+                        ?>
+                        <div class="track-item">
+                            <div class="track-details-wrapper">
+                                <img src="<?= htmlspecialchars($track_cover) ?>" alt="<?= htmlspecialchars($track['title']) ?> Cover" class="track-cover">
+                                <div class="track-info">
+                                    <span class="track-name"><?= htmlspecialchars($track_num) ?>. <?= htmlspecialchars($track['title']) ?></span>
+                                    <span class="track-date">
+                                        Released: <?= htmlspecialchars($track_date) ?>
+                                        <?php if (!empty($track['play_count']) && $track['play_count'] > 0) : ?>
+                                            • <?= number_format($track['play_count']) ?> plays
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="media-buttons">
+                                <?php if (!empty($track['spotify_url'])) : ?>
+                                    <a href="<?= htmlspecialchars($track['spotify_url']) ?>" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
+                                <?php endif; ?>
+                                <?php if (!empty($track['youtube_url'])) : ?>
+                                    <a href="<?= htmlspecialchars($track['youtube_url']) ?>" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/3rAcN3CLeSrkhIZN8PHbwb" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=e2OpbOv_JiQ" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 3. FaSHioN -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/FaSHioN.png" alt="FaSHioN Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">3. FaSHioN</span>
-                            <span class="track-date">Released: Sep 8, 2025</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/4ecdsGz3Hg6TKPwQ0ZOdJz" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=42wfEs7oIP8" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 4. JoyRide -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/JoyRide.png" alt="JoyRide Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">4. JoyRide</span>
-                            <span class="track-date">Released: Sep 8, 2025</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/6T17ZI0glfM2IGLdUwtnLK" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=8QZeXvOjgGE" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 5. Lullaby -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/Lullaby.png" alt="Lullaby Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">5. Lullaby</span>
-                            <span class="track-date">Released: Sep 8, 2025</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/0nyhsAcyDj533QrXa4hUug" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=8ej2YOBsimQ" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 6. What You Want (feat. Teezo Touchdown) -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/What You Want (feat. Teezo Touchdown).png" alt="What You Want Remix Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">6. What You Want (feat. Teezo Touchdown)</span>
-                            <span class="track-date">Released: Aug 22, 2025</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/1pFQRreMptp3dkh64WiUNx" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=J8s5-vsT_Dc" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
+                        <?php $no++; endwhile; ?>
+                    <?php else : ?>
+                        <p style="color:#a1a1aa; text-align:center;">No tracks added for this album yet.</p>
+                    <?php endif; ?>
                 </div>
             </div>
-        </div>
+        <?php endwhile; endif; ?>
 
-        <!-- EP 2: GreenGreen -->
-        <div class="album-card">
-            <div class="album-info">
-                <img src="Assets/images/GreenGreen.png" alt="GreenGreen Cover" class="album-cover">
-                <h3 class="album-title">GreenGreen</h3>
-                <p class="album-meta">2nd EP • May 4, 2026</p>
-                <p class="album-desc">Represents CORTIS's mature principles, dividing priorities into "Green" (pursuits) and "Red" (red flags/social pressures to reject).</p>
-            </div>
-            <div class="tracklist">
-                <!-- 1. TNT -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/TNT.png" alt="TNT Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">1. TNT</span>
-                            <span class="track-date">Released: May 4, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/7diH1qnFziArYzynk3vkr6" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=kRpaqR5sbf0" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 2. RedRed -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/RedRed.png" alt="RedRed Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">2. RedRed</span>
-                            <span class="track-date">Released: Apr 20, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/2fCwv2ppU5nTRTckomIGsd" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=U6BDbXIah-Y" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 3. Acai -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/Acai.png" alt="Acai Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">3. Acai</span>
-                            <span class="track-date">Released: May 4, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/7Ldcvhcl4Xj4eOTSWpZus5" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=nCElUD0jvgo" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 4. YoungCreatorCrew -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/YoungCreatorCrew.png" alt="YoungCreatorCrew Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">4. YoungCreatorCrew</span>
-                            <span class="track-date">Released: May 4, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/2vKNzC9T3kdU2JECcvob3V" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=tCSBgOIA63M" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 5. Wassup -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/Wassup.png" alt="Wassup Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">5. Wassup</span>
-                            <span class="track-date">Released: May 4, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/3dCdcURa0Kk5UWXRY00HQy" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=oEow4l7mP7c" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-
-                <!-- 6. Blue Lips -->
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/Blue Lips.png" alt="Blue Lips Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">6. Blue Lips</span>
-                            <span class="track-date">Released: May 4, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/1VyXprVXZYNGWWZf1u4JfN" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=hOIY3OhvD94" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SINGLE 1: Mention Me -->
-        <div class="album-card">
-            <div class="album-info">
-                <img src="Assets/images/Mention Me.png" alt="Mention Me Cover" class="album-cover">
-                <h3 class="album-title">Mention Me</h3>
-                <p class="album-meta">Digital Single • Feb 13, 2026</p>
-                <p class="album-desc">Released as the Official Soundtrack (OST) for the American animated sports comedy film "GOAT".</p>
-            </div>
-            <div class="tracklist">
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/Mention Me (2).png" alt="Mention Me Track Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">1. Mention Me</span>
-                            <span class="track-date">Released: Feb 13, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/track/3f0OEJd7mlPNhmH3fUOrqy" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=iGGxMGeJzmw" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SINGLE 2: It's Me X Redred -->
-        <div class="album-card">
-            <div class="album-info">
-                <img src="Assets/images/It's Me X Redred.png" alt="It's Me X Redred Cover" class="album-cover">
-                <h3 class="album-title">It's Me X Redred</h3>
-                <p class="album-meta">Digital Single • Jun 5, 2026</p>
-                <p class="album-desc">An exclusive digital mashup track distributed on YouTube, combining the beats of CORTIS's "RedRed" with "It's Me".</p>
-            </div>
-            <div class="tracklist">
-                <div class="track-item">
-                    <div class="track-details-wrapper">
-                        <img src="Assets/images/It's Me X Redred (2).png" alt="It's Me X Redred Track Cover" class="track-cover">
-                        <div class="track-info">
-                            <span class="track-name">1. It's Me X Redred</span>
-                            <span class="track-date">Released: Jun 5, 2026</span>
-                        </div>
-                    </div>
-                    <div class="media-buttons">
-                        <a href="https://open.spotify.com/playlist/1u6HN7g47i4sCELDWgemWp" target="_blank" class="btn btn-spotify">Play Music on Spotify</a>
-                        <a href="https://www.youtube.com/watch?v=XAZWDEljjdk" target="_blank" class="btn btn-youtube">Play MV on Youtube</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php if (!$found_any) : ?>
+            <p style="text-align:center; color:#0ff; font-size:1.15rem; padding: 30px;">No matching tracks or albums found.</p>
+        <?php endif; ?>
 
     </section>
 
