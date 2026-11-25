@@ -12,20 +12,19 @@ $variation_id     = isset($_POST['variation_id']) ? (int) $_POST['variation_id']
 $quantity         = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 0;
 $payment_method   = trim($_POST['payment_method'] ?? '');
 $customer_name    = trim($_POST['customer_name'] ?? '');
-$customer_email   = trim($_POST['customer_email'] ?? '');
 $customer_phone   = trim($_POST['customer_phone'] ?? '');
 $shipping_address = trim($_POST['shipping_address'] ?? '');
 
 // 2. Validasi kelengkapan input dasar
-if ($product_id <= 0 || $variation_id <= 0 || $quantity <= 0 || empty($customer_name) || empty($customer_email) || empty($customer_phone) || empty($shipping_address)) {
+if ($product_id <= 0 || $variation_id <= 0 || $quantity <= 0 || empty($customer_name) || empty($customer_phone) || empty($shipping_address)) {
     $msg = urlencode('Harap lengkapi seluruh data pemesanan dengan benar.');
     header("Location: Store.php?status=error&msg=$msg");
     exit;
 }
 
-// 3. Cek harga produk & ketersediaan stok variasi di database
+// 3. Cek harga produk, berat produk & ketersediaan stok variasi di database
 $q_cek = mysqli_query($conn, "
-    SELECT p.price, p.product_name, v.stock 
+    SELECT p.price, p.product_name, p.weight_gram, v.stock 
     FROM products p 
     INNER JOIN product_variations v ON p.product_id = v.product_id 
     WHERE p.product_id = $product_id AND v.variation_id = $variation_id 
@@ -40,6 +39,7 @@ if (!$q_cek || mysqli_num_rows($q_cek) === 0) {
 
 $data_item     = mysqli_fetch_assoc($q_cek);
 $unit_price    = (float) $data_item['price'];
+$weight_gram   = (int) ($data_item['weight_gram'] ?? 0);
 $stok_tersedia = (int) $data_item['stock'];
 
 if ($quantity > $stok_tersedia) {
@@ -48,40 +48,72 @@ if ($quantity > $stok_tersedia) {
     exit;
 }
 
-// 4. Hitung total & buat kode transaksi unik
-$subtotal         = $unit_price * $quantity;
-$total_amount     = $subtotal;
-$transaction_code = 'CRT-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
+// 4. Hitung total harga, total berat & set nilai default pengiriman
+$subtotal_price   = $unit_price * $quantity;
+$shipping_cost    = 0;
+$grand_total      = $subtotal_price + $shipping_cost;
+$total_weight     = $weight_gram * $quantity;
+$courier_service  = 'Standard Delivery';
+$transaction_date = date('Y-m-d H:i:s');
 
 // 5. Jalankan transaksi database (ACID) agar data konsisten
 mysqli_begin_transaction($conn);
 
 try {
-    $esc_code    = mysqli_real_escape_string($conn, $transaction_code);
     $esc_name    = mysqli_real_escape_string($conn, $customer_name);
-    $esc_email   = mysqli_real_escape_string($conn, $customer_email);
     $esc_phone   = mysqli_real_escape_string($conn, $customer_phone);
     $esc_address = mysqli_real_escape_string($conn, $shipping_address);
+    $esc_courier = mysqli_real_escape_string($conn, $courier_service);
     $esc_payment = mysqli_real_escape_string($conn, $payment_method);
 
-    // Simpan ke tabel transactions
+    // Simpan ke tabel transactions (sesuai struktur asli tabel transactions)
     $sql_trx = "
-        INSERT INTO transactions (transaction_code, customer_name, customer_email, customer_phone, shipping_address, total_amount, payment_method, status)
-        VALUES ('$esc_code', '$esc_name', '$esc_email', '$esc_phone', '$esc_address', $total_amount, '$esc_payment', 'Pending')
+        INSERT INTO transactions (
+            customer_name, 
+            customer_phone, 
+            shipping_address, 
+            courier_service, 
+            shipping_cost, 
+            payment_method, 
+            total_weight, 
+            grand_total, 
+            transaction_date, 
+            status
+        ) VALUES (
+            '$esc_name', 
+            '$esc_phone', 
+            '$esc_address', 
+            '$esc_courier', 
+            $shipping_cost, 
+            '$esc_payment', 
+            $total_weight, 
+            $grand_total, 
+            '$transaction_date', 
+            'Pending'
+        )
     ";
     if (!mysqli_query($conn, $sql_trx)) {
-        throw new Exception('Gagal menyimpan data transaksi utama.');
+        throw new Exception('Gagal menyimpan transaksi: ' . mysqli_error($conn));
     }
 
     $transaction_id = mysqli_insert_id($conn);
 
-    // Simpan ke tabel transaction_details
+    // Simpan ke tabel transaction_details (sesuai struktur asli tabel transaction_details)
     $sql_detail = "
-        INSERT INTO transaction_details (transaction_id, product_id, variation_id, quantity, unit_price, subtotal)
-        VALUES ($transaction_id, $product_id, $variation_id, $quantity, $unit_price, $subtotal)
+        INSERT INTO transaction_details (
+            transaction_id, 
+            variation_id, 
+            quantity, 
+            subtotal_price
+        ) VALUES (
+            $transaction_id, 
+            $variation_id, 
+            $quantity, 
+            $subtotal_price
+        )
     ";
     if (!mysqli_query($conn, $sql_detail)) {
-        throw new Exception('Gagal menyimpan rincian item pesanan.');
+        throw new Exception('Gagal menyimpan rincian pesanan: ' . mysqli_error($conn));
     }
 
     // Kurangi stok pada tabel product_variations
@@ -96,8 +128,11 @@ try {
 
     mysqli_commit($conn);
 
+    // Buat kode tampilan transaksi dari transaction_id yang baru tersimpan
+    $display_code = 'CRT-' . date('Ymd') . '-' . str_pad($transaction_id, 4, '0', STR_PAD_LEFT);
+
     // Redirect kembali ke Store.php dengan status sukses
-    header("Location: Store.php?status=success&code=" . urlencode($transaction_code));
+    header("Location: Store.php?status=success&code=" . urlencode($display_code));
     exit;
 
 } catch (Exception $e) {
