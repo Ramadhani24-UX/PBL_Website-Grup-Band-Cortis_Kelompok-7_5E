@@ -1,4 +1,5 @@
 <?php
+require_once 'auth_check.php';
 require 'connection.php';
 $id = mysqli_real_escape_string($conn, $_GET['id']);
 $query = "DELETE FROM transactions WHERE transaction_id='$id'";
