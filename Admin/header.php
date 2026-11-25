@@ -1,6 +1,10 @@
 <?php
+require_once 'auth_check.php';
+
 // Mendeteksi halaman yang sedang dibuka agar menu sidebar menyala (active)
 $current_page = basename($_SERVER['PHP_SELF']);
+$admin_name   = $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Admin';
+$admin_role   = $_SESSION['admin_role'] ?? 'Staff';
 ?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -104,9 +108,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <a href="index.php" class="nav-link">Home</a>
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+                <li class="nav-item d-none d-md-block">
+                    <span class="nav-link text-accent fw-bold">
+                        <i class="fas fa-user-shield me-1"></i> <?= htmlspecialchars($admin_name) ?> (<?= htmlspecialchars($admin_role) ?>)
+                    </span>
+                </li>
                 <li class="nav-item">
-                    <span class="nav-link text-accent fw-bold">CORTIS Management System</span>
+                    <a href="logout.php" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin keluar dari panel Admin?')">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
                 </li>
             </ul>
         </div>
