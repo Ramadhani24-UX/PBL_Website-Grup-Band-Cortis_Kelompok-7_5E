@@ -1,13 +1,22 @@
 <?php
 require 'connection.php';
 include 'header.php';
+
+function resolveAdminThumb($path) {
+    if (empty($path)) return '';
+    if (file_exists($path)) return $path;
+    if (file_exists('../' . $path)) return '../' . $path;
+    if (file_exists('../Assets/images/' . $path)) return '../Assets/images/' . $path;
+    if (file_exists('uploads/' . $path)) return 'uploads/' . $path;
+    return '';
+}
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="m-0">Read Data: Product Variations</h3>
     <a href="product_variations_insert.php" class="btn btn-primary">+ Insert New Data</a>
 </div>
 <div class="card p-3" style="overflow-x: auto;">
-    <table class="table table-bordered table-striped mb-0">
+    <table class="table table-bordered table-striped mb-0 align-middle">
         <thead>
             <tr>
                 <th>variation_id</th>
@@ -16,6 +25,7 @@ include 'header.php';
                 <th>color</th>
                 <th>gender_type</th>
                 <th>stock</th>
+                <th>image_path</th>
                 <th width="150">Actions</th>
             </tr>
         </thead>
@@ -24,6 +34,18 @@ include 'header.php';
 $result = mysqli_query($conn, "SELECT * FROM product_variations ORDER BY variation_id DESC");
 if(mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
+        $raw_img  = $row['image_path'] ?? '';
+        $thumb    = resolveAdminThumb($raw_img);
+        $img_cell = "<span class='text-secondary'>-</span>";
+        if ($thumb !== '') {
+            $img_cell = "<div class='d-flex align-items-center gap-2'>
+                            <img src='" . htmlspecialchars($thumb) . "' alt='Var' style='width:42px; height:42px; object-fit:cover; border-radius:6px; border:1px solid #495057;'>
+                            <small class='text-info'>" . htmlspecialchars($raw_img) . "</small>
+                         </div>";
+        } elseif ($raw_img !== '') {
+            $img_cell = "<small class='text-info'>" . htmlspecialchars($raw_img) . "</small>";
+        }
+
         echo "<tr>";
         echo "<td>" . $row['variation_id'] . "</td>";
         echo "<td>" . htmlspecialchars($row['product_id'] ?? '') . "</td>";
@@ -31,6 +53,7 @@ if(mysqli_num_rows($result) > 0) {
         echo "<td>" . htmlspecialchars($row['color'] ?? '') . "</td>";
         echo "<td>" . htmlspecialchars($row['gender_type'] ?? '') . "</td>";
         echo "<td>" . htmlspecialchars($row['stock'] ?? '') . "</td>";
+        echo "<td>" . $img_cell . "</td>";
         echo "<td>
                 <a href='product_variations_update.php?id=" . $row['variation_id'] . "' class='btn btn-sm btn-warning'>Update</a>
                 <a href='product_variations_delete.php?id=" . $row['variation_id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this data?\")'>Delete</a>
