@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require_once 'auth_check.php';
 
 // Mendeteksi halaman yang sedang dibuka agar menu sidebar menyala (active)
@@ -94,11 +93,15 @@ $admin_role   = $_SESSION['admin_role'] ?? 'Staff';
             text-align: center !important;
         }
 
-        /* Penyesuaian warna SweetAlert2 agar serasi dengan tema CORTIS */
+        /* Penyesuaian warna SweetAlert2: judul & keterangan berwarna putih bersih */
         .swal2-popup {
             background: #161922 !important;
             border: 1px solid rgba(0, 186, 198, 0.4) !important;
             border-radius: 14px !important;
+        }
+        .swal2-title,
+        .swal2-html-container {
+            color: #ffffff !important;
         }
     </style>
 </head>
