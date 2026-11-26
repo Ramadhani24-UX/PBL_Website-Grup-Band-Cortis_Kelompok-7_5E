@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once 'auth_check.php';
 
 // Mendeteksi halaman yang sedang dibuka agar menu sidebar menyala (active)
@@ -17,6 +18,8 @@ $admin_role   = $_SESSION['admin_role'] ?? 'Staff';
     <link rel="stylesheet" href="adminlte/css/adminlte.min.css">
     <!-- Font Awesome untuk Ikon Menu -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 Dark Theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
     
     <!-- Custom Style CORTIS -->
     <style>
@@ -89,6 +92,13 @@ $admin_role   = $_SESSION['admin_role'] ?? 'Staff';
             margin: 0 !important;
             padding: 0 !important;
             text-align: center !important;
+        }
+
+        /* Penyesuaian warna SweetAlert2 agar serasi dengan tema CORTIS */
+        .swal2-popup {
+            background: #161922 !important;
+            border: 1px solid rgba(0, 186, 198, 0.4) !important;
+            border-radius: 14px !important;
         }
     </style>
 </head>
