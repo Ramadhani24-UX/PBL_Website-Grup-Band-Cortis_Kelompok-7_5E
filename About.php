@@ -104,10 +104,10 @@ $q_gallery = mysqli_query($conn, "SELECT * FROM gallery ORDER BY display_order A
 <!-- NAVBAR -->
 <nav class="navbar">
     <ul>
-        <li><a href="index.php">HOME</a></li>
-        <li><a href="About.php">ABOUT CORTIS</a></li>
-        <li><a href="The_Music.php">MUSIC</a></li>
-        <li><a href="Store.php">STORE</a></li>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="About.php">About</a></li>
+        <li><a href="The_Music.php">#Stream Cortis</a></li>
+        <li><a href="Store.php">Store</a></li>
     </ul>
 </nav>
 

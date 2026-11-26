@@ -477,7 +477,7 @@ if ($q_top_tracks) {
                     <li><a href="index.php" class="nav-link active" data-target="home-page">Home</a></li>
                     <li><a href="About.php">About</a></li>
                     <li><a href="The_Music.php">#Stream Cortis</a></li>
-                    <li><a href="Store.php">Support</a></li>
+                    <li><a href="Store.php">Store</a></li>
                 </ul>
             </nav>
         </div>

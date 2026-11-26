@@ -430,9 +430,9 @@ $q_albums = mysqli_query($conn, $sql_albums);
             <span class="separator">|</span>
             <a href="About.php">About</a>
             <span class="separator">|</span>
+            <a href="The_Music.php" class="active">#Stream Cortis</a>
             <a href="Store.php">Store</a>
             <span class="separator">|</span>
-            <a href="The_Music.php" class="active">The Music</a>
         </div>
     </nav>
 

@@ -498,7 +498,7 @@ if ($q_vars) {
                     <li><a href="index.php">Home</a></li>
                     <li><a href="About.php">About</a></li>
                     <li><a href="The_Music.php">#Stream Cortis</a></li>
-                    <li><a href="Store.php" class="active">Support</a></li>
+                    <li><a href="Store.php" class="active">Store</a></li>
                 </ul>
             </nav>
         </div>
